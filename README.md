@@ -19,5 +19,5 @@ For nighttime for things like time and headings, depth, or any anything that is 
 
 A few of the starting components ie Raspberry Pi 4 Model B, IMU, Gyros, Wii Nunchuk Controller, 7segment display, paper display, rotary encoder with switches ect.  
 ![image](https://github.com/user-attachments/assets/a870a949-c9db-4369-a92c-a95e79bf3a6a)
-  
 
+Will use multiple microphones setup with a VOSK Offline Speech Recognition to run certain controls with specific keywords. 

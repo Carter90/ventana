@@ -11,7 +11,7 @@ flowchart LR
     BS[/Bow Sensors/] -->|ROS over Ethernet| EKF[EKF]
     GPS[/GPS/] -->|ROS over Ethernet| EKF[EKF]
     EKF[EKF] -->|ROS over localhost| Localization[Localization]
-    Waypoint[/External Waypoint feed/] --> Control
+    Waypoint[/External Waypoint feed/] --> MControl
     Localization[Localization] --> |Local Localization| MControl
     Localization[Localization] --> |Global Localization| MControl
     Localization[Localization] --> |Map View| Web[Web via Flask]
@@ -19,8 +19,8 @@ flowchart LR
     Tablet/Phone/Laptop-->|Wifi 3g & 5g| Web[Web via Flask] --> |ROS over Ethernet|MControl
     Helm --> |ROS over Ethernet| MControl
     MControl[Motor Control] -->|CAN bus| Motor[/Motor/]
-    Web[Web via Flask] --> AControl[Auxiliary Controll] --> Pumps[/Pumps/]
-    Helm --> AControl[Auxiliary Controll] --> Lights[/Lights/]
+    Web[Web via Flask] --> AControl[Auxiliary Control] --> Pumps[/Pumps/]
+    Helm --> AControl[Auxiliary Control] --> Lights[/Lights/]
 
     MS ~~~|"Mast, Helm & Bow have a IMU, accelerometer, gyroscope & magnetometers"| MS        
 

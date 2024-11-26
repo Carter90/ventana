@@ -6,25 +6,34 @@ Details regarding the resortation of the physical boat can be found at boat.cart
 Current systems diagram *subject to change*
 ```mermaid
 flowchart LR
-    MS[/Mast Sensors/] -->|ROS over Ethernet| EKF[EKF]
-    HS[/Helm Sensors/] -->|ROS over Ethernet| EKF[EKF]
-    BS[/Bow Sensors/] -->|ROS over Ethernet| EKF[EKF]
-    GPS[/GPS/] -->|ROS over Ethernet| EKF[EKF]
-    EKF[EKF] -->|ROS over localhost| Localization[Localization]
-    Waypoint[/External Waypoint feed/] --> MControl
-    Localization[Localization] --> |Local Localization| MControl
-    Localization[Localization] --> |Global Localization| MControl
-    Localization[Localization] --> |Map View| Web[Web via Flask]
+MS[/Mast Sensors/] -->|ROS over Ethernet| EKF[EKF]
+HS[/Helm Sensors/] -->|ROS over Ethernet| EKF[EKF]
+BS[/Bow Sensors/] -->|ROS over Ethernet| EKF[EKF]
+GPS[/GPS/] -->|ROS over Ethernet| EKF[EKF]
+EKF[EKF] -->|ROS over localhost| Localization[Localization]
+Waypoint[/External Waypoint feed/] --> MControl
+Localization[Localization] --> |Local Localization| MControl
+Localization[Localization] --> |Global Localization| MControl
+Localization[Localization] --> |Map View| Web[Web via Flask]
 
-    Tablet/Phone/Laptop-->|Wifi 3g & 5g| Web[Web via Flask] --> |ROS over Ethernet|MControl
-    Helm --> |ROS over Ethernet| MControl
-    MControl[Motor Control] -->|CAN bus| Motor[/Motor/]
-    Web[Web via Flask] --> AControl[Auxiliary Control] --> Pumps[/Pumps/]
-    Helm --> AControl[Auxiliary Control] --> Lights[/Lights/]
+throughhull[/Through-hull Sensor/] --> |ROS over Ethernet| EKF
+Sonar[/Sonar Forward Array/] --> EKF
+throughhull-->AControl
+Sonar-->AControl
 
-    MS ~~~|"Mast, Helm & Bow have a IMU, accelerometer, gyroscope & magnetometers"| MS        
+Tablet/Phone/Laptop-->|Wifi 3g & 5g| Web[Web via Flask] --> |ROS over Ethernet|MControl
+Helm --> |ROS over Ethernet| MControl
+MControl[Motor Control] <-->|CAN bus| Motor[/Motor/]
+Web[Web via Flask] --> AControl[Auxiliary Control] --> Pumps[/Pumps/]
+Helm --> AControl[Auxiliary Control] --> Lights[/Lights/]
+VOSK[/VOSK Offline Speech Recognition/] --> MControl
+VOSK --> AControl --> Alarms[/Alarms/]
+ABilge[/Abaft Bilge Water Levels/] --> AControl
+MBilge[/Mast Bilge Water Levels/] --> AControl
+MS ~~~|"Mast, Helm & Bow have a IMU, accelerometer, gyroscope & magnetometers"| MS
+MControl <--> |ROS Status/Alarms|AControl      
 
-    All[/All Topic's Data/] -->|ROS over Wifi, Ethernet & localhost| Logger[Logger] -->|Synced| DB[(SQLite DB)]
+All[/All Topic's Data/] -->|ROS over Wifi, Ethernet & localhost| Logger[Logger] -->|Synced| DB[(SQLite DB)]
 ```
 
 For the port/starboard portlight's I'm installing these Flexible Silicone Neon-Like LED Strips https://www.adafruit.com/product/3860  

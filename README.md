@@ -3,6 +3,29 @@
 This system will integrate all the systems on a sailboat including propulsion, lights, sensors ect, radios. 
 Details regarding the resortation of the physical boat can be found at boat.carterfrost.com
 
+Current systems diagram *subject to change*
+```mermaid
+flowchart LR
+    MS[/Mast Sensors/] -->|ROS over Ethernet| EKF[EKF]
+    HS[/Helm Sensors/] -->|ROS over Ethernet| EKF[EKF]
+    BS[/Bow Sensors/] -->|ROS over Ethernet| EKF[EKF]
+    GPS[/GPS/] -->|ROS over Ethernet| EKF[EKF]
+    EKF[EKF] -->|ROS over localhost| Localization[Localization]
+    Waypoint[/External Waypoint feed/] --> Control
+    Localization[Localization] --> |Local Localization| MControl
+    Localization[Localization] --> |Global Localization| MControl
+    Localization[Localization] --> |Map View| Web[Web via Flask]
+
+    Tablet/Phone/Laptop-->|Wifi 3g & 5g| Web[Web via Flask] --> |ROS over Ethernet|MControl
+    Helm --> |ROS over Ethernet| MControl
+    MControl[Motor Control] -->|CAN bus| Motor[/Motor/]
+    Web[Web via Flask] --> AControl[Auxiliary Controll] --> Pumps[/Pumps/]
+    Helm --> AControl[Auxiliary Controll] --> Lights[/Lights/]
+
+    MS ~~~|"Mast, Helm & Bow have a IMU, accelerometer, gyroscope & magnetometers"| MS        
+
+    All[/All Topic's Data/] -->|ROS over Wifi, Ethernet & localhost| Logger[Logger] -->|Synced| DB[(SQLite DB)]
+```
 
 For the port/starboard portlight's I'm installing these Flexible Silicone Neon-Like LED Strips https://www.adafruit.com/product/3860  
 For the main controlable lights with a set in the v-birth, head, galley & saloon  
